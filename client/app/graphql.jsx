@@ -4,7 +4,7 @@ import React from 'react'
 import axios from 'axios'
 
 function performQuery(query, params) {
-  return axios.post('/graphql', {query, params})
+  return axios.post('http://localhost:3004/graphql', {query, params})
 }
 
 module.exports = function (Component: ReactClass): ReactClass {
@@ -15,10 +15,10 @@ module.exports = function (Component: ReactClass): ReactClass {
       super(props)
       this.state = {loading: true}
       performQuery(Component.query, Component.params)
-        .then(data => {
+        .then(resp => {
           this.setState({
             loading: false,
-            data
+            data: resp.data
           })
         })
     }

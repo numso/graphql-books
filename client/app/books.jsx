@@ -10,9 +10,12 @@ export class Books extends React.Component {
   static displayName = 'Books'
 
   static query = `
-    BooksQuery($ownIt: Boolean) {
+    query BooksQuery($ownIt: Boolean) {
       books(ownIt: $ownIt) {
-        title
+        title,
+        author {
+          name
+        }
       }
     }
   `
@@ -21,9 +24,16 @@ export class Books extends React.Component {
     ownIt: true
   }
 
+  static propTypes = {
+    data: React.PropTypes.object.isRequired
+  }
+
   render(): ReactElement {
     return (
-      <div>Books Container</div>
+      <div>
+        <div>Books Container</div>
+        <pre>{JSON.stringify(this.props.data, null, 2)}</pre>
+      </div>
     )
   }
 

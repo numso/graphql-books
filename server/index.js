@@ -1,10 +1,16 @@
 /* @flow */
 
 import express from 'express'
+import bodyParser from 'body-parser'
+import cors from 'cors'
 import webpack from 'webpack'
 import WebpackDevServer from 'webpack-dev-server'
+import {graphql} from 'graphql'
+
+import {BooksSchema} from './graphql'
 
 import config from '../webpack.config'
+
 var hmrPort = 3000
 var appPort = 3004
 
@@ -16,6 +22,17 @@ new WebpackDevServer(webpack(config), config.devServer).listen(hmrPort, '0.0.0.0
 })
 
 var app = express()
+
+app.use(cors())
+app.use(bodyParser.json())
+
+app.post('/graphql', (req, res) => {
+  var {query, params} = req.body
+  graphql(BooksSchema, query, null, params).then(result => {
+    console.log(JSON.stringify(result, null, 2))
+    res.send(result.data)
+  })
+})
 
 app.listen(appPort, err => {
   if (err) {
