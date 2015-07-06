@@ -4,6 +4,8 @@
     "react"
   ],
   "globals": {
+    "ReactElement": true,
+    "ReactClass": true
   },
   "ecmaFeatures": {
     "arrowFunctions": true,
@@ -172,7 +174,7 @@
     "sort-vars": 0,
     "space-after-keywords": [0, "always"],
     "space-before-blocks": [0, "always"],
-    "space-before-function-parentheses": [2, "never"],
+    "space-before-function-parentheses": 0,
     "space-in-brackets": [0, "never"],
     "space-in-parens": [0, "never"],
     "space-infix-ops": 2,

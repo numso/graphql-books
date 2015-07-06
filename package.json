@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "babel-node server/index",
     "test_flow": "flow check",
     "test_lint": "eslint --ext .js --ext .jsx client server",
     "test": "npm run test_flow && npm run test_lint && echo \"We Good\""
@@ -12,11 +13,24 @@
   "author": "Dallin Osmun",
   "license": "AGPL3",
   "dependencies": {
+    "axios": "0.5.4",
+    "babel-core": "5.6.15",
     "babel-eslint": "3.1.21",
+    "babel-loader": "5.3.1",
+    "css-loader": "0.15.1",
     "eslint": "0.24.0",
     "eslint-plugin-react": "2.6.4",
+    "express": "4.13.0",
     "graphql": "0.1.2",
+    "json-loader": "0.5.2",
     "node-libs-browser": "0.5.2",
-    "webpack": "1.10.1"
+    "react": "0.13.3",
+    "react-hot-loader": "1.2.7",
+    "react-router": "1.0.0-beta3",
+    "rethinkdbdash": "1.16.13",
+    "style-loader": "0.12.3",
+    "stylus-loader": "1.2.1",
+    "webpack": "1.10.1",
+    "webpack-dev-server": "1.10.1"
   }
 }

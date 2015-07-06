@@ -1,6 +1,6 @@
 /* @flow */
 
-import webpack from 'webpack'
+var webpack = require('webpack')
 
 module.exports = {
 
@@ -41,7 +41,7 @@ module.exports = {
   },
 
   externals: {
-    APIHOST: '"/api"'
+    APIHOST: '"http://localhost:3004"'
   },
 
   devServer: {

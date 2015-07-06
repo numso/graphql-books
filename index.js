@@ -1,11 +1,9 @@
-/* @flow */
-
 import {
   graphql,
   GraphQLSchema,
   GraphQLObjectType,
   GraphQLString
-} from 'graphql';
+} from 'graphql'
 
 var schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -17,9 +15,9 @@ var schema = new GraphQLSchema({
       }
     }
   })
-});
+})
 
-var query = '{ hello }';
+var query = '{ hello }'
 
 graphql(schema, query).then(result => {
 
@@ -27,6 +25,6 @@ graphql(schema, query).then(result => {
   // {
   //   data: { hello: "world" }
   // }
-  console.log(result);
+  console.log(result)
 
-});
+})

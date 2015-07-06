@@ -1,2 +1,4 @@
 node_modules/
+rethinkdb_data/
+client/build/
 .DS_Store
