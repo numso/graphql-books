@@ -1,0 +1,22 @@
+{
+  "name": "graphql-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test_flow": "flow check",
+    "test_lint": "eslint --ext .js --ext .jsx client server",
+    "test": "npm run test_flow && npm run test_lint && echo \"We Good\""
+  },
+  "keywords": [],
+  "author": "Dallin Osmun",
+  "license": "AGPL3",
+  "dependencies": {
+    "babel-eslint": "3.1.21",
+    "eslint": "0.24.0",
+    "eslint-plugin-react": "2.6.4",
+    "graphql": "0.1.2",
+    "node-libs-browser": "0.5.2",
+    "webpack": "1.10.1"
+  }
+}
