@@ -14,7 +14,19 @@ module.exports = function (Component: ReactClass): ReactClass {
     constructor(props) {
       super(props)
       this.state = {loading: true}
-      performQuery(Component.query, Component.params)
+      this.getData(props)
+    }
+
+    componentWillReceiveProps(nextProps) {
+      if (this.props.isTransitioning !== nextProps.isTransitioning) {
+        return
+      }
+      this.setState({loading: true, data: null})
+      this.getData(nextProps)
+    }
+
+    getData(props) {
+      performQuery(Component.query, Component.getParams(props))
         .then(resp => {
           this.setState({
             loading: false,
@@ -27,7 +39,7 @@ module.exports = function (Component: ReactClass): ReactClass {
       if (this.state.loading) {
         return <div>Loading...</div>
       }
-      return <Component data={this.state.data}/>
+      return <Component {...this.props} data={this.state.data}/>
     }
 
   }

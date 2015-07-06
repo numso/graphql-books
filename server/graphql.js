@@ -24,6 +24,11 @@ var authorType = new GraphQLObjectType({
     name: {
       type: GraphQLString,
       description: 'The name of the author.'
+    },
+    books: {
+      type: new GraphQLList(bookType),
+      description: 'All the books this author has written',
+      resolve: (author) => booksModel.getByAuthor(author.id)
     }
   })
 })

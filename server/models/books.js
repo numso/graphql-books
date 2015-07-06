@@ -15,3 +15,7 @@ export function get(id: string): Promise<Book> {
 export function getAll(ownIt: bool): Promise<Array<Book>> {
   return query.filter({ownIt}).run()
 }
+
+export function getByAuthor(authorId: string): Promise<Array<Book>> {
+  return query.filter({authorId}).run()
+}
