@@ -5,6 +5,9 @@ import {filter} from 'lodash'
 
 import GraphQL from './graphql'
 
+var foo = 'wut'
+3 * foo
+
 @GraphQL
 export class Test extends React.Component {
 

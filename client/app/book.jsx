@@ -1,6 +1,7 @@
 /* @flow */
 
 import React from 'react'
+import {Link} from 'react-router'
 import {map} from 'lodash'
 
 import GraphQL from './graphql'
@@ -13,12 +14,14 @@ export class Book extends React.Component {
   static query = `
     query BookQuery($id: String!) {
       book(id: $id) {
+        id,
         title,
         description,
         coverUrl,
         author {
           name,
           books {
+            id,
             title,
             coverUrl
           }
@@ -38,23 +41,25 @@ export class Book extends React.Component {
   }
 
   render(): ReactElement {
+    var book = this.props.data.book
     return (
       <div>
         <div style={{display: 'flex'}}>
-          <img src={this.props.data.book.coverUrl}/>
+          <img src={book.coverUrl}/>
           <div style={{paddingLeft: 20}}>
-            <div style={{fontSize: 36}}>{this.props.data.book.title}</div>
-            <div style={{paddingLeft: 10}}>by {this.props.data.book.author.name}</div>
-            <div style={{paddingTop: 20, paddingLeft: 10}}>{this.props.data.book.description}</div>
+            <div style={{fontSize: 36}}>{book.title}</div>
+            <div style={{paddingLeft: 10}}>by {book.author.name}</div>
+            <div style={{paddingTop: 20, paddingLeft: 10}}>{book.description}</div>
           </div>
+          <Link to={`book/${book.id}/edit`}>Edit Book</Link>
         </div>
         <div style={{padding: '30px 0', fontSize: 18}}>Other Books by this author:</div>
         <div style={{display: 'flex'}}>
-          {map(this.props.data.book.author.books, book => (
-            <div>
-              <img style={{width: 100, height: 150, padding: 10}} src={book.coverUrl}/>
-              <div>{book.title}</div>
-            </div>
+          {map(book.author.books, _book => (
+            <Link to={`book/${_book.id}`}>
+              <img style={{width: 100, height: 150, padding: 10}} src={_book.coverUrl}/>
+              <div>{_book.title}</div>
+            </Link>
           ))}
         </div>
       </div>

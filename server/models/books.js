@@ -12,6 +12,10 @@ export function get(id: string): Promise<Book> {
   return query.get(id).run()
 }
 
+export function update(id: string, book: Book): Promise<Book> {
+  return query.get(id).update(book).run()
+}
+
 export function getAll(ownIt: bool): Promise<Array<Book>> {
   return query.filter({ownIt}).run()
 }

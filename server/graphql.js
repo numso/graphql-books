@@ -1,5 +1,6 @@
 /* @flow */
 
+import {map} from 'lodash'
 import {
   GraphQLSchema,
   GraphQLList,
@@ -78,23 +79,16 @@ var bookType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'The notes about the book.'
     }
-
-    // friends: {
-    //   type: new GraphQLList(characterInterface),
-    //   description: 'The friends of the human, or an empty list if they ' +
-    //                'have none.',
-    //   resolve: (human) => getFriends(human)
-    // },
-    // appearsIn: {
-    //   type: new GraphQLList(episodeEnum),
-    //   description: 'Which movies they appear in.'
-    // }
   })
 })
 
 var queryType = new GraphQLObjectType({
   name: 'Query',
   fields: () => ({
+    authors: {
+      type: new GraphQLList(authorType),
+      resolve: () => authorsModel.getAll()
+    },
     books: {
       type: new GraphQLList(bookType),
       args: {
@@ -118,6 +112,81 @@ var queryType = new GraphQLObjectType({
   })
 })
 
+var mutationType = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: {
+    updateBook: {
+      type: bookType,
+      args: {
+        id: {
+          name: 'id',
+          type: new GraphQLNonNull(GraphQLString)
+        },
+        title: {
+          name: 'title',
+          type: GraphQLString
+        },
+        rating: {
+          name: 'rating',
+          type: GraphQLInt
+        },
+        description: {
+          name: 'description',
+          type: GraphQLString
+        },
+        isbn: {
+          name: 'isbn',
+          type: GraphQLString
+        },
+        authorId: {
+          name: 'authorId',
+          type: GraphQLString
+        },
+        coverUrl: {
+          name: 'coverUrl',
+          type: GraphQLString
+        },
+        ownIt: {
+          name: 'ownIt',
+          type: GraphQLBoolean
+        },
+        notes: {
+          name: 'notes',
+          type: GraphQLString
+        }
+      },
+      resolve: async function (obj, args) {
+        var book = await booksModel.get(args.id)
+        if (!book) {
+          // should I throw an error here?
+          return null
+        }
+        for (var key in args) {
+          var arg = args[key]
+          if (key == 'id' || arg == null || arg == undefined) {
+            continue
+          }
+          if (key == 'rating' && (arg < 1 || arg > 10)) {
+            // should I throw an error here?
+            continue
+          }
+          if (key == 'authorId') {
+            var author = await authorsModel.get(arg)
+            if (!author) {
+              // should I throw an error here?
+              continue
+            }
+          }
+          book[key] = arg
+        }
+        await booksModel.update(args.id, book)
+        return book
+      }
+    }
+  }
+})
+
 export var BooksSchema = new GraphQLSchema({
-  query: queryType
+  query: queryType,
+  mutation: mutationType
 })
