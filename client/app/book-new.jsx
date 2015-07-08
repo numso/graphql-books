@@ -16,23 +16,10 @@ function link(key) {
 }
 
 @GraphQL
-export class BookEdit extends React.Component {
-
-  static displayName = 'BookEdit'
+export class BookNew extends React.Component {
 
   static query = `
-    query BookQuery($id: String!) {
-      book(id: $id) {
-        id,
-        title,
-        rating,
-        description,
-        isbn,
-        authorId,
-        coverUrl,
-        ownIt,
-        notes
-      }
+    query GetAuthors {
       authors {
         id,
         name
@@ -40,11 +27,7 @@ export class BookEdit extends React.Component {
     }
   `
 
-  static getParams(props) {
-    return {
-      id: props.params.id
-    }
-  }
+  static displayName = 'BookNew'
 
   static propTypes = {
     data: React.PropTypes.object.isRequired,
@@ -57,30 +40,30 @@ export class BookEdit extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = props.data.book
+    this.state = {}
   }
 
   save() {
     var params = this.state
     var query = `
-      mutation update($id: String! $title: String $rating: Int $description: String $isbn: String $authorId: String $coverUrl: String $ownIt: Boolean $notes: String) {
-        updateBook(id: $id title: $title rating: $rating description: $description isbn: $isbn authorId: $authorId coverUrl: $coverUrl ownIt: $ownIt notes: $notes) {
+      mutation update($title: String $rating: Int $description: String $isbn: String $authorId: String $author: String $coverUrl: String $ownIt: Boolean $notes: String) {
+        createBook(title: $title rating: $rating description: $description isbn: $isbn authorId: $authorId author: $author coverUrl: $coverUrl ownIt: $ownIt notes: $notes) {
           id
         }
       }
     `
 
     axios.post('http://localhost:3004/graphql', {query, params})
-      .then(() => this.context.router.transitionTo(`book/${this.props.params.id}`))
+      .then(res => this.context.router.transitionTo(`book/${res.data.createBook.id}`))
   }
 
   render(): ReactElement {
-    var {authors, book} = this.props.data
+    var {authors} = this.props.data
     return (
       <div style={{margin: '0 100px'}}>
         <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-          <h1 style={{margin: '20px 0'}}>Editing Book: {book.title}</h1>
-          <Link to={`book/${book.id}`}>Discard Changes</Link>
+          <h1 style={{margin: '20px 0'}}>New Book</h1>
+          <Link to="books">Discard New Book</Link>
         </div>
 
         <Label>Title:</Label>
@@ -102,7 +85,14 @@ export class BookEdit extends React.Component {
         <Input type="select" valueLink={link.call(this, 'authorId')}>
           <option value="" disabled> - - - </option>
           {map(authors, a => <option value={a.id}>{a.name}</option>)}
+          <option value="other">Other</option>
         </Input>
+
+        {this.state.authorId == 'other' && (
+          <div>
+            <Input type="text" placeholder="New Author's Name" valueLink={link.call(this, 'author')}/>
+          </div>
+        )}
 
         <Label>Cover Url:</Label>
         <Input type="text" valueLink={link.call(this, 'coverUrl')}/>
@@ -113,7 +103,7 @@ export class BookEdit extends React.Component {
         <Label>Notes:</Label>
         <Input type="textarea" valueLink={link.call(this, 'notes')}/>
 
-        <Button onClick={this.save.bind(this)}>Save And Return</Button>
+        <Button onClick={this.save.bind(this)}>Save And View</Button>
       </div>
     )
   }

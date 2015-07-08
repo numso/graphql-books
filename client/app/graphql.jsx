@@ -2,6 +2,7 @@
 
 import React from 'react'
 import axios from 'axios'
+import {noop} from 'lodash'
 
 function performQuery(query, params) {
   return axios.post('http://localhost:3004/graphql', {query, params})
@@ -26,7 +27,7 @@ module.exports = function (Component: ReactClass): ReactClass {
     }
 
     getData(props) {
-      performQuery(Component.query, Component.getParams(props))
+      performQuery(Component.query, (Component.getParams || noop)(props))
         .then(resp => {
           this.setState({
             loading: false,

@@ -52,7 +52,7 @@ export class Books extends React.Component {
             {map(this.props.data.books, book => (
               <tr style={{cursor: 'pointer'}} onClick={() => this.context.router.transitionTo(`book/${book.id}`)}>
                 <td>{book.title}</td>
-                <td>{book.author.name}</td>
+                <td>{(book.author || {}).name || '--'}</td>
                 <td>{book.description}</td>
               </tr>
             ))}

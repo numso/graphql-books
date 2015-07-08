@@ -5,7 +5,8 @@
   ],
   "globals": {
     "ReactElement": true,
-    "ReactClass": true
+    "ReactClass": true,
+    "$Shape": true
   },
   "ecmaFeatures": {
     "arrowFunctions": true,

@@ -42,20 +42,21 @@ export class Book extends React.Component {
 
   render(): ReactElement {
     var book = this.props.data.book
+    var author = book.author || { name: '--', books: []}
     return (
       <div>
         <div style={{display: 'flex'}}>
           <img src={book.coverUrl}/>
           <div style={{paddingLeft: 20}}>
             <div style={{fontSize: 36}}>{book.title}</div>
-            <div style={{paddingLeft: 10}}>by {book.author.name}</div>
+            <div style={{paddingLeft: 10}}>by {author.name}</div>
             <div style={{paddingTop: 20, paddingLeft: 10}}>{book.description}</div>
           </div>
           <Link to={`book/${book.id}/edit`}>Edit Book</Link>
         </div>
         <div style={{padding: '30px 0', fontSize: 18}}>Other Books by this author:</div>
         <div style={{display: 'flex'}}>
-          {map(book.author.books, _book => (
+          {map(author.books, _book => (
             <Link to={`book/${_book.id}`}>
               <img style={{width: 100, height: 150, padding: 10}} src={_book.coverUrl}/>
               <div>{_book.title}</div>

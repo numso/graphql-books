@@ -1,6 +1,5 @@
 /* @flow */
 
-import {map} from 'lodash'
 import {
   GraphQLSchema,
   GraphQLList,
@@ -13,6 +12,7 @@ import {
 
 import * as booksModel from './models/books'
 import * as authorsModel from './models/authors'
+import {Book} from './types'
 
 var authorType = new GraphQLObjectType({
   name: 'Author',
@@ -180,6 +180,80 @@ var mutationType = new GraphQLObjectType({
           book[key] = arg
         }
         await booksModel.update(args.id, book)
+        return book
+      }
+    },
+    createBook: {
+      type: bookType,
+      args: {
+        title: {
+          name: 'title',
+          type: GraphQLString
+        },
+        rating: {
+          name: 'rating',
+          type: GraphQLInt
+        },
+        description: {
+          name: 'description',
+          type: GraphQLString
+        },
+        isbn: {
+          name: 'isbn',
+          type: GraphQLString
+        },
+        author: {
+          name: 'author',
+          type: GraphQLString
+        },
+        authorId: {
+          name: 'authorId',
+          type: GraphQLString
+        },
+        coverUrl: {
+          name: 'coverUrl',
+          type: GraphQLString
+        },
+        ownIt: {
+          name: 'ownIt',
+          type: GraphQLBoolean
+        },
+        notes: {
+          name: 'notes',
+          type: GraphQLString
+        }
+      },
+      resolve: async function (obj, args) {
+        var book: $Shape<Book> = {ownIt: false}
+        for (var key in args) {
+          var arg = args[key]
+          if (arg == null || arg == undefined || key == 'author') {
+            continue
+          }
+          if (key == 'rating' && (arg < 1 || arg > 10)) {
+            // should I throw an error here?
+            continue
+          }
+          if (key == 'authorId') {
+            if (arg == 'other') {
+              if (args.author) {
+                var _res = await authorsModel.create(args.author)
+                console.log(_res)
+                book.authorId = _res.generated_keys[0]
+              }
+              continue
+            } else {
+              var author = await authorsModel.get(arg)
+              if (!author) {
+                // should I throw an error here?
+                continue
+              }
+            }
+          }
+          book[key] = arg
+        }
+        var res = await booksModel.create(book)
+        book.id = res.generated_keys[0]
         return book
       }
     }

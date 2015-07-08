@@ -17,6 +17,7 @@ module.exports = React.createClass({
           <div style={{fontSize: 24, padding: '0 20px'}}>Book Keeper</div>
           <a href="/#/books" style={{paddingLeft: 16}}>Owned Books</a>
           <a href="/#/books/wishlist" style={{paddingLeft: 16}}>Wanted Books</a>
+          <a href="/#/book/new" style={{paddingLeft: 16}}>Add New Book</a>
         </div>
         {this.props.children || 'not loaded'}
       </div>

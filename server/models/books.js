@@ -8,6 +8,10 @@ var r = rethinkdb()
 
 var query = r.db('graphql').table('books')
 
+export function create(book: $Shape<Book>): Promise<any> {
+  return query.insert(book).run()
+}
+
 export function get(id: string): Promise<Book> {
   return query.get(id).run()
 }
