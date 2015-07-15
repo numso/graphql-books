@@ -65,7 +65,7 @@ module.exports = React.createClass({
         <h1>A Solution</h1>
         <div style={{display: 'flex', flex: 1, width: '100%'}}>
           <ul style={{fontSize: 24, paddingRight: 50}}>
-            {map(items, (item, i) => <li className="fade-me" style={{opacity: this.state.num < i ? 0 : 1}}>{item}</li>)}
+            {map(items, (item, i) => <li className="fade-me" style={{fontWeight: this.state.num === i ? 'bold' : 'inherit', opacity: this.state.num < i ? 0 : 1}}>{item}</li>)}
           </ul>
           <div style={{position: 'relative', flex: 1}}>
             {map(imgs, (img, i) => (
