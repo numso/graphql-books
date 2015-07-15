@@ -39,6 +39,7 @@ var MainMenu = React.createClass({
 
   render(): ReactElement {
     var links = [
+      {lbl: '0 - Presentation', to: 'preso/1'},
       {lbl: '1 - Books App', to: 'books/owned'},
       {lbl: '2 - API Docs', to: 'docs'},
       {lbl: '3 - Query Page', to: 'query'}
