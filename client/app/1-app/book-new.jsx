@@ -6,7 +6,7 @@ import {Input, Label, Button} from 'react-bootstrap'
 import {map} from 'lodash'
 import axios from 'axios'
 
-import GraphQL from './graphql'
+import GraphQL from '../utils/graphql'
 
 function link(key) {
   return {
@@ -44,17 +44,19 @@ export class BookNew extends React.Component {
   }
 
   save() {
-    var params = this.state
+    var params = {book: this.state}
     var query = `
-      mutation update($title: String $rating: Int $description: String $isbn: String $authorId: String $author: String $coverUrl: String $ownIt: Boolean $notes: String) {
-        createBook(title: $title rating: $rating description: $description isbn: $isbn authorId: $authorId author: $author coverUrl: $coverUrl ownIt: $ownIt notes: $notes) {
+      mutation update($book: InputBook) {
+        createBook(book: $book) {
           id
         }
       }
     `
 
     axios.post('http://localhost:3004/graphql', {query, params})
-      .then(res => this.context.router.transitionTo(`book/${res.data.createBook.id}`))
+      .then(res => {
+        this.context.router.transitionTo(`book/${res.data.data.createBook.id}`)
+      })
   }
 
   render(): ReactElement {

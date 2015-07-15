@@ -31,7 +31,8 @@ module.exports = function (Component: ReactClass): ReactClass {
         .then(resp => {
           this.setState({
             loading: false,
-            data: resp.data
+            data: resp.data.data,
+            errors: resp.data.errors
           })
         })
     }
@@ -40,7 +41,7 @@ module.exports = function (Component: ReactClass): ReactClass {
       if (this.state.loading) {
         return <div>Loading...</div>
       }
-      return <Component {...this.props} data={this.state.data}/>
+      return <Component {...this.props} data={this.state.data} errors={this.state.errors} query={Component.query}/>
     }
 
   }

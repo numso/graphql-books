@@ -1,9 +1,9 @@
 /* @flow */
 
 import React from 'react'
-import {map} from 'lodash'
+import {includes, map} from 'lodash'
 
-import GraphQL from './graphql'
+import GraphQL from '../utils/graphql'
 
 @GraphQL
 export class Books extends React.Component {
@@ -25,7 +25,7 @@ export class Books extends React.Component {
 
   static getParams(props) {
     return {
-      ownIt: props.location.pathname == '/books'
+      ownIt: includes(['books/owned', '/books/owned'], props.location.pathname)
     }
   }
 

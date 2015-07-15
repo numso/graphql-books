@@ -16,6 +16,10 @@ export function get(id: string): Promise<Author> {
   return query.get(id).run()
 }
 
-export function getAll(): Promise<Array<Author>> {
-  return query.run()
+export async function getAll(): Promise<Array<Author>> {
+  var res = await query.run()
+  res.sort((a, b) => {
+    return a.name > b.name ? 1 : -1
+  })
+  return res
 }

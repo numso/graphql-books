@@ -21,6 +21,9 @@ export function update(id: string, book: Book): Promise<Book> {
 }
 
 export function getAll(ownIt: bool): Promise<Array<Book>> {
+  if (ownIt === undefined || ownIt === null) {
+    return query.run()
+  }
   return query.filter({ownIt}).run()
 }
 

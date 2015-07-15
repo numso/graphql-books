@@ -5,6 +5,7 @@ import {
   GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
+  GraphQLInputObjectType,
   GraphQLString,
   GraphQLInt,
   GraphQLBoolean
@@ -82,15 +83,61 @@ var bookType = new GraphQLObjectType({
   })
 })
 
+var inputBookType = new GraphQLInputObjectType({
+  name: 'InputBook',
+  description: 'A book to be inputted into the database.',
+  fields: () => ({
+    title: {
+      type: GraphQLString,
+      description: 'The title of the book.'
+    },
+    rating: {
+      type: GraphQLInt,
+      description: 'The rating out of 10 that you give the book'
+    },
+    description: {
+      type: GraphQLString,
+      description: 'The description of the book.'
+    },
+    isbn: {
+      type: GraphQLString,
+      description: 'The isbn of the book.'
+    },
+    authorId: {
+      type: GraphQLString,
+      description: 'The id of the author who wrote the book.'
+    },
+    author: {
+      type: GraphQLString,
+      description: 'The name of the author you want to add.'
+    },
+    coverUrl: {
+      type: GraphQLString,
+      description: 'The coverUrl of the book.'
+    },
+    ownIt: {
+      type: GraphQLBoolean,
+      description: 'Whether or not you own the book or want to buy it.'
+    },
+    notes: {
+      type: GraphQLString,
+      description: 'The notes about the book.'
+    }
+  })
+})
+
 var queryType = new GraphQLObjectType({
   name: 'Query',
+  description: 'The root query of graphql. Start here :).',
   fields: () => ({
     authors: {
       type: new GraphQLList(authorType),
+      description: 'A list of all authors in the database.',
       resolve: () => authorsModel.getAll()
     },
     books: {
       type: new GraphQLList(bookType),
+      description: 'A list of all books. If arg is passed in, will filter based on `ownIt`.',
       args: {
         ownIt: {
           name: 'ownIt',
@@ -101,9 +148,11 @@ var queryType = new GraphQLObjectType({
     },
     book: {
       type: bookType,
+      description: 'A specific book, based on an id.',
       args: {
         id: {
           name: 'id',
+          description: 'The ID of the book you are trying to look up.',
           type: new GraphQLNonNull(GraphQLString)
         }
       },
@@ -114,55 +163,30 @@ var queryType = new GraphQLObjectType({
 
 var mutationType = new GraphQLObjectType({
   name: 'Mutation',
+  description: 'The root mutation of graphql. If you\'re trying to create or update something, start here.',
   fields: {
     updateBook: {
       type: bookType,
+      description: 'Update a book, given an id and an object of updates to make.',
       args: {
         id: {
           name: 'id',
           type: new GraphQLNonNull(GraphQLString)
         },
-        title: {
-          name: 'title',
-          type: GraphQLString
-        },
-        rating: {
-          name: 'rating',
-          type: GraphQLInt
-        },
-        description: {
-          name: 'description',
-          type: GraphQLString
-        },
-        isbn: {
-          name: 'isbn',
-          type: GraphQLString
-        },
-        authorId: {
-          name: 'authorId',
-          type: GraphQLString
-        },
-        coverUrl: {
-          name: 'coverUrl',
-          type: GraphQLString
-        },
-        ownIt: {
-          name: 'ownIt',
-          type: GraphQLBoolean
-        },
-        notes: {
-          name: 'notes',
-          type: GraphQLString
+        book: {
+          name: 'book',
+          type: inputBookType
         }
       },
       resolve: async function (obj, args) {
+        var _book = args.book || {}
         var book = await booksModel.get(args.id)
         if (!book) {
           // should I throw an error here?
           return null
         }
-        for (var key in args) {
-          var arg = args[key]
+        for (var key in _book) {
+          var arg = _book[key]
           if (key == 'id' || arg == null || arg == undefined) {
             continue
           }
@@ -185,48 +209,18 @@ var mutationType = new GraphQLObjectType({
     },
     createBook: {
       type: bookType,
+      description: 'Create a new book. Requires that you pass in a book object.',
       args: {
-        title: {
-          name: 'title',
-          type: GraphQLString
-        },
-        rating: {
-          name: 'rating',
-          type: GraphQLInt
-        },
-        description: {
-          name: 'description',
-          type: GraphQLString
-        },
-        isbn: {
-          name: 'isbn',
-          type: GraphQLString
-        },
-        author: {
-          name: 'author',
-          type: GraphQLString
-        },
-        authorId: {
-          name: 'authorId',
-          type: GraphQLString
-        },
-        coverUrl: {
-          name: 'coverUrl',
-          type: GraphQLString
-        },
-        ownIt: {
-          name: 'ownIt',
-          type: GraphQLBoolean
-        },
-        notes: {
-          name: 'notes',
-          type: GraphQLString
+        book: {
+          name: 'book',
+          type: inputBookType
         }
       },
       resolve: async function (obj, args) {
+        var _book = args.book || {}
         var book: $Shape<Book> = {ownIt: false}
-        for (var key in args) {
-          var arg = args[key]
+        for (var key in _book) {
+          var arg = _book[key]
           if (arg == null || arg == undefined || key == 'author') {
             continue
           }
@@ -236,9 +230,8 @@ var mutationType = new GraphQLObjectType({
           }
           if (key == 'authorId') {
             if (arg == 'other') {
-              if (args.author) {
-                var _res = await authorsModel.create(args.author)
-                console.log(_res)
+              if (_book.author) {
+                var _res = await authorsModel.create(_book.author)
                 book.authorId = _res.generated_keys[0]
               }
               continue

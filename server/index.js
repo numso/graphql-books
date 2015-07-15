@@ -29,8 +29,7 @@ app.use(bodyParser.json())
 app.post('/graphql', (req, res) => {
   var {query, params} = req.body
   graphql(BooksSchema, query, null, params).then(result => {
-    console.log(JSON.stringify(result, null, 2))
-    res.send(result.data)
+    res.send(result)
   })
 })
 

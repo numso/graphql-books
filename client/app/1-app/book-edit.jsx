@@ -6,7 +6,7 @@ import {Input, Label, Button} from 'react-bootstrap'
 import {map} from 'lodash'
 import axios from 'axios'
 
-import GraphQL from './graphql'
+import GraphQL from '../utils/graphql'
 
 function link(key) {
   return {
@@ -61,10 +61,10 @@ export class BookEdit extends React.Component {
   }
 
   save() {
-    var params = this.state
+    var params = {book: this.state, id: this.state.id}
     var query = `
-      mutation update($id: String! $title: String $rating: Int $description: String $isbn: String $authorId: String $coverUrl: String $ownIt: Boolean $notes: String) {
-        updateBook(id: $id title: $title rating: $rating description: $description isbn: $isbn authorId: $authorId coverUrl: $coverUrl ownIt: $ownIt notes: $notes) {
+      mutation update($id: String! $book: InputBook) {
+        updateBook(id: $id book: $book) {
           id
         }
       }
