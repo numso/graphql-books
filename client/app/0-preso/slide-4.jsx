@@ -21,9 +21,10 @@ var sayHi = greet => {
 var destructuring = `
 var {map, each, filter} = require('lodash')
 
-function ({name, birthday}) {
-  console.log('name:', name)
-  return birthday
+var lastName = 'Smith'
+function bar({name, birthday}) {
+  console.log('birthday: ', birthday)
+  return {name, lastName}
 }
 `
 var exportImport = `
@@ -46,19 +47,19 @@ module.exports = React.createClass({
         <div style={{height: '100%', width: '100%', display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap'}}>
           <div style={{width: '40%'}}>
             <h4>Async/Await</h4>
-            <pre><code class="js">{asyncAwait}</code></pre>
+            <pre><code className="js">{asyncAwait}</code></pre>
           </div>
           <div style={{width: '40%'}}>
             <h4>Fat Arrows</h4>
-            <pre><code class="js">{fatArrows}</code></pre>
+            <pre><code className="js">{fatArrows}</code></pre>
           </div>
           <div style={{width: '40%'}}>
-            <h4>Destructuring</h4>
-            <pre><code class="js">{destructuring}</code></pre>
+            <h4>Destructuring/Restructuring</h4>
+            <pre><code className="js">{destructuring}</code></pre>
           </div>
           <div style={{width: '40%'}}>
             <h4>ES6 Export/Import</h4>
-            <pre><code class="js">{exportImport}</code></pre>
+            <pre><code className="js">{exportImport}</code></pre>
           </div>
         </div>
       </div>

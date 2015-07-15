@@ -14,6 +14,7 @@ import {Books} from './1-app/books'
 import {Book} from './1-app/book'
 import {BookEdit} from './1-app/book-edit'
 import {BookNew} from './1-app/book-new'
+import {Test} from './1-app/test'
 
 import {Docs} from './2-docs/index'
 
@@ -30,6 +31,7 @@ React.render((
       <Route path="book/new" component={BookNew}/>
       <Route path="book/:id" component={Book}/>
       <Route path="book/:id/edit" component={BookEdit}/>
+      <Route path="test" component={Test}/>
 
       <Route path="docs" component={Docs}/>
 

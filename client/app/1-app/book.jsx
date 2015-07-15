@@ -2,8 +2,8 @@
 
 import React from 'react'
 import {Link} from 'react-router'
-import {map} from 'lodash'
 
+import {Shelf} from './pieces/shelf'
 import GraphQL from '../utils/graphql'
 
 @GraphQL
@@ -20,11 +20,7 @@ export class Book extends React.Component {
         coverUrl,
         author {
           name,
-          books {
-            id,
-            title,
-            coverUrl
-          }
+          ${Shelf.query}
         }
       }
     }
@@ -57,14 +53,7 @@ export class Book extends React.Component {
           <Link style={{position: 'absolute', top: 10, right: 30}} to={`book/${book.id}/edit`}>Edit Book</Link>
         </div>
         <div style={{padding: '30px 0', fontSize: 18}}>Other Books by this author:</div>
-        <div style={{display: 'flex'}}>
-          {map(author.books, _book => (
-            <Link to={`book/${_book.id}`} style={{padding: '0 20px', textAlign: 'center'}}>
-              <img style={{width: 100, height: 150}} src={_book.coverUrl}/>
-              <div>{_book.title}</div>
-            </Link>
-          ))}
-        </div>
+        <Shelf data={author}/>
       </div>
     )
   }
