@@ -18,19 +18,19 @@ export type Book = {
   notes: ?string;
 }
 
-export type Series = {
-  id: string;
-  title: string;
-  rating: number;
-  books: Array<Book>;
-}
-
-export type Group = {
-  id: string;
-  title: string;
-  books: Array<Book>;
-  series: Array<Series>;
-}
+// export type Series = {
+//   id: string;
+//   title: string;
+//   rating: number;
+//   books: Array<Book>;
+// }
+//
+// export type Group = {
+//   id: string;
+//   title: string;
+//   books: Array<Book>;
+//   series: Array<Series>;
+// }
 
 export type Query = {
   books: (ownIt: boolean) => Array<Book>;

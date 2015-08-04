@@ -11,7 +11,7 @@ Preso
   - queries look like the structure you get back
   - no more under-fetching or over-fetching or api versioning
   - can put it in gradually
-- Show off app
+- Show the app
   - book management for my wife
   - can view books you have or want, add new books, and edit books
   - right now it's in REST
@@ -22,7 +22,13 @@ Preso
     - solution 1: Add rating to the book view
     - solution 2: Add another Shelf component
 
-Todo
-====
-- rewrite app in REST
-- practice :)
+
+
+
+
+
+query empty {
+  ${Shelf.query}
+}
+
+  <Shelf data={props.data}/>
