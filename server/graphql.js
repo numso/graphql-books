@@ -13,11 +13,11 @@ import {
 
 import * as booksModel from './models/books'
 import * as authorsModel from './models/authors'
-import {Book} from './types'
+// import {Author, Book} from './types'
 
 // Code Goes Here
 
 export var BooksSchema = new GraphQLSchema({
-  query: queryType,
-  mutation: mutationType
+  query: queryType
+  // mutation: mutationType
 })

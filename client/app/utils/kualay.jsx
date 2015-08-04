@@ -51,7 +51,7 @@ var createContainer = function (Component: any): ReactClass {
     },
 
     render() {
-      if (this.state.loading || !this.state.data) {
+      if (this.state.loading) {
         return <div>Loading...</div>
       }
       return <Component {...this.props} data={this.state.data} mutate={this.mutate} errors={this.state.errors} query={Component.query}/>
