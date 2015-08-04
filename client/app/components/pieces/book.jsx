@@ -15,6 +15,7 @@ export default React.createClass({
   statics: {
     query: `
       title,
+      rating,
       coverUrl
     `
   },
@@ -29,7 +30,7 @@ export default React.createClass({
     return (
       <div style={{padding: '0 20px', textAlign: 'center'}}>
         <img style={{width: 100, height: 150}} src={book.coverUrl}/>
-        <div>{book.title}</div>
+        <div>{book.title} ({book.rating} / 10)</div>
       </div>
     )
   }

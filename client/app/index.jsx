@@ -13,6 +13,7 @@ import Books from './components/books'
 import Book from './components/book'
 import BookEdit from './components/book-edit'
 import BookNew from './components/book-new'
+import CoverFlow from './components/cover-flow'
 
 import Docs from './docs/index'
 
@@ -27,6 +28,7 @@ React.render((
       <Route path="book/new" component={BookNew}/>
       <Route path="book/:id" component={Book}/>
       <Route path="book/:id/edit" component={BookEdit}/>
+      <Route path="test" component={CoverFlow}/>
 
       <Route path="docs" component={Docs}/>
 

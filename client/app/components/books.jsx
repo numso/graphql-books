@@ -26,6 +26,7 @@ var Books = React.createClass({
         books(ownIt: $ownIt) {
           id,
           title,
+          isbn,
           description,
           author {
             name
@@ -59,6 +60,7 @@ var Books = React.createClass({
               <th>Title</th>
               <th>Author</th>
               <th>Description</th>
+              <th>ISBN</th>
             </tr>
           </thead>
           <tbody>
@@ -67,6 +69,7 @@ var Books = React.createClass({
                 <td>{book.title}</td>
                 <td>{(book.author || {}).name || '--'}</td>
                 <td style={{maxWidth: 500}}>{book.description}</td>
+                <td>{book.isbn}</td>
               </tr>
             ))}
           </tbody>

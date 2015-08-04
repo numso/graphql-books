@@ -13,8 +13,14 @@ var Query = React.createClass({
   statics: {
     query: `
       query myQuery {
-        books {
+        book(id: "51f44fcd-b530-494a-b388-0d9db5cb86bd") {
           title
+          author {
+            name,
+            books {
+              title
+            }
+          }
         }
       }
     `
