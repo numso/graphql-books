@@ -17,7 +17,10 @@ var lookup = {
   '2': 'author',
   '3': 'ownIt',
   '4': 'ownIt',
-  '7': 'coverUrl'
+  '5': 'isbn',
+  '6': 'notes',
+  '7': 'coverUrl',
+  '8': 'description'
 }
 
 async function getBooks() {

@@ -4,25 +4,36 @@ import React from 'react'
 import {Link} from 'react-router'
 import {map} from 'lodash'
 
-import {Book} from './book'
+import Book from './book'
 
-export class Shelf extends React.Component {
+import type {Book as BookT} from '../../../../server/types'
 
-  static displayName = 'Shelf'
+type Props = {
+  data: {
+    books: Array<$Shape<BookT>>;
+  };
+};
 
-  static query = `
-    books {
-      id
-      ${Book.query}
-    }
-  `
+export default React.createClass({
 
-  static propTypes = {
+  displayName: 'Shelf',
+
+  statics: {
+    query: `
+      books {
+        id
+        ${Book.query}
+      }
+    `
+  },
+
+  propTypes: {
     data: React.PropTypes.object.isRequired
-  }
+  },
 
   render(): ReactElement {
-    var books = this.props.data.books
+    var props: Props = this.props
+    var {books} = props.data
     return (
       <div style={{display: 'flex', flexWrap: 'wrap'}}>
         {map(books, book => (
@@ -34,4 +45,4 @@ export class Shelf extends React.Component {
     )
   }
 
-}
+})

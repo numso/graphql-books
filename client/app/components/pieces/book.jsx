@@ -2,21 +2,30 @@
 
 import React from 'react'
 
-export class Book extends React.Component {
+import type {Book} from '../../../../server/types'
 
-  static displayName = 'Book'
+type Props = {
+  data: $Shape<Book>;
+};
 
-  static query = `
-    title,
-    coverUrl
-  `
+export default React.createClass({
 
-  static propTypes = {
+  displayName: 'Book',
+
+  statics: {
+    query: `
+      title,
+      coverUrl
+    `
+  },
+
+  propTypes: {
     data: React.PropTypes.object.isRequired
-  }
+  },
 
   render(): ReactElement {
-    var book = this.props.data
+    var props: Props = this.props
+    var book = props.data
     return (
       <div style={{padding: '0 20px', textAlign: 'center'}}>
         <img style={{width: 100, height: 150}} src={book.coverUrl}/>
@@ -25,4 +34,4 @@ export class Book extends React.Component {
     )
   }
 
-}
+})

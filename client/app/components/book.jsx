@@ -3,41 +3,55 @@
 import React from 'react'
 import {Link} from 'react-router'
 
-import {Shelf} from './pieces/shelf'
-import GraphQL from '../utils/graphql'
+import Shelf from './pieces/shelf'
+import Kualay from '../utils/kualay'
 
-@GraphQL
-export class Book extends React.Component {
+import type {Book as BookT} from '../../../server/types'
 
-  static displayName = 'Book'
+type Props = {
+  params: {
+    id: string;
+  };
+  data: {
+    book: BookT;
+  };
+};
 
-  static query = `
-    query BookQuery($id: String!) {
-      book(id: $id) {
-        id,
-        title,
-        description,
-        coverUrl,
-        author {
-          name,
-          ${Shelf.query}
+var Book = React.createClass({
+
+  displayName: 'Book',
+
+  statics: {
+    query: `
+      query BookQuery($id: String!) {
+        book(id: $id) {
+          id,
+          title,
+          description,
+          rating,
+          coverUrl,
+          author {
+            name,
+            ${Shelf.query}
+          }
         }
       }
+    `,
+    getParams(props: Props) {
+      return {
+        id: props.params.id
+      }
     }
-  `
+  },
 
-  static getParams(props) {
-    return {
-      id: props.params.id
-    }
-  }
-
-  static propTypes = {
+  propTypes: {
+    params: React.PropTypes.object.isRequired,
     data: React.PropTypes.object.isRequired
-  }
+  },
 
   render(): ReactElement {
-    var book = this.props.data.book
+    var props: Props = this.props
+    var {book} = props.data
     var author = book.author || { name: '--', books: []}
     return (
       <div>
@@ -46,7 +60,7 @@ export class Book extends React.Component {
             <img src={book.coverUrl} style={{maxWidth: 200, maxHeight: 320}}/>
           </div>
           <div style={{paddingLeft: 20}}>
-            <div style={{fontSize: 36}}>{book.title}</div>
+            <div style={{fontSize: 36}}>{book.title} ({book.rating} / 10)</div>
             <div style={{paddingLeft: 10}}>by {author.name}</div>
             <div style={{paddingTop: 20, paddingLeft: 10}}>{book.description}</div>
           </div>
@@ -58,4 +72,6 @@ export class Book extends React.Component {
     )
   }
 
-}
+})
+
+export default Kualay.createContainer(Book)

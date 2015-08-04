@@ -8,15 +8,23 @@ function performQuery(query, params) {
   return axios.post('http://localhost:3004/graphql', {query, params})
 }
 
-module.exports = function (Component: ReactClass): ReactClass {
+var createContainer = function (Component: any): ReactClass {
 
-  return class GraphQLContainer extends React.Component {
+  return React.createClass({
 
-    constructor(props) {
-      super(props)
-      this.state = {loading: true}
-      this.getData(props)
-    }
+    displayName: 'KualayContainer',
+
+    propTypes: {
+      isTransitioning: React.PropTypes.bool
+    },
+
+    getInitialState() {
+      return { loading: true }
+    },
+
+    componentWillMount() {
+      this.getData(this.props)
+    },
 
     componentWillReceiveProps(nextProps) {
       if (this.props.isTransitioning !== nextProps.isTransitioning) {
@@ -24,7 +32,7 @@ module.exports = function (Component: ReactClass): ReactClass {
       }
       this.setState({loading: true, data: null})
       this.getData(nextProps)
-    }
+    },
 
     getData(props) {
       performQuery(Component.query, (Component.getParams || noop)(props))
@@ -35,15 +43,22 @@ module.exports = function (Component: ReactClass): ReactClass {
             errors: resp.data.errors
           })
         })
-    }
+    },
+
+    mutate(key, params) {
+      var query = Component.mutations[key]
+      return performQuery(query, params)
+    },
 
     render() {
-      if (this.state.loading) {
+      if (this.state.loading || !this.state.data) {
         return <div>Loading...</div>
       }
-      return <Component {...this.props} data={this.state.data} errors={this.state.errors} query={Component.query}/>
+      return <Component {...this.props} data={this.state.data} mutate={this.mutate} errors={this.state.errors} query={Component.query}/>
     }
 
-  }
+  })
 
 }
+
+export default {createContainer}

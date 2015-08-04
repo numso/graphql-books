@@ -4,9 +4,11 @@
     "react"
   ],
   "globals": {
-    "ReactElement": true,
     "ReactClass": true,
-    "$Shape": true
+    "ReactComponent": true,
+    "ReactElement": true,
+    "$Shape": true,
+    "$Enum": true
   },
   "ecmaFeatures": {
     "arrowFunctions": true,

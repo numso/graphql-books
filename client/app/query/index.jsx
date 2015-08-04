@@ -4,37 +4,28 @@ import React from 'react'
 import {Alert} from 'react-bootstrap'
 import {map} from 'lodash'
 
-import GraphQL from '../utils/graphql'
+import Kualay from '../utils/kualay'
 
-@GraphQL
-export class Query extends React.Component {
+var Query = React.createClass({
 
-  static displayName = 'Query'
+  displayName: 'Query',
 
-  static query = `
-    query getSchema {
-      __schema {
-        types {
-          name
-          description
-          kind
-          fields {
-            name
-            description
-            type {
-              name
-            }
-          }
+  statics: {
+    query: `
+      query myQuery {
+        books {
+          id
+          title
         }
       }
-    }
-  `
+    `
+  },
 
-  static propTypes = {
+  propTypes: {
     data: React.PropTypes.object,
     errors: React.PropTypes.object,
     query: React.PropTypes.string.isRequired
-  }
+  },
 
   render(): ReactElement {
     var data = this.props.data
@@ -71,7 +62,9 @@ export class Query extends React.Component {
     )
   }
 
-}
+})
+
+export default Kualay.createContainer(Query)
 
 // query bookQuery {
 //   books(ownIt: true) {
